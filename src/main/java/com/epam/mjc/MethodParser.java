@@ -1,5 +1,9 @@
 package com.epam.mjc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class MethodParser {
 
     /**
@@ -20,6 +24,73 @@ public class MethodParser {
      * @return {@link MethodSignature} object filled with parsed values from source string
      */
     public MethodSignature parseFunction(String signatureString) {
-        throw new UnsupportedOperationException("You should implement this method.");
+
+        StringTokenizer st = new StringTokenizer(signatureString.substring
+                (0,signatureString.indexOf('('))," ");
+        String str = "";
+        while(st.hasMoreElements()) {
+            str=str+st.nextElement()+" ";
+        }
+        String arr[] = str.split(" ");
+
+
+        StringTokenizer st3 = new StringTokenizer(signatureString.substring
+                (signatureString.indexOf('(')),"[(, )]");
+
+        String s31="";
+
+        while(st3.hasMoreElements()) {
+            s31=s31+st3.nextElement()+" ";
+        }
+        System.out.println(s31);
+        List<MethodSignature.Argument> arguments = new ArrayList<>();
+
+        String arr1[] = s31.split(" ");
+
+        MethodSignature.Argument a[] = new MethodSignature.Argument[arr1.length/2];
+
+        for(int i=0;i<arr1.length/2;i++){
+            a[i] = new MethodSignature.Argument(null,null);
+        }
+
+
+String stringName = "";
+        String stringType = "";
+        for(int i=1;i<arr1.length;i=i+2){
+            stringName=stringName+arr1[i]+" ";
+        }
+
+        for(int i=0;i<arr1.length;i=i+2){
+            stringType=stringType+arr1[i]+" ";
+        }
+        String arrName[] = stringName.split(" ");
+        String arrType[] = stringType.split(" ");
+            for(int i=0;i<arrType.length;i++) {
+
+                a[i].setType(arrType[i]);
+                a[i].setName(arrName[i]);
+
+
+arguments.add(a[i]);
+            }
+
+
+
+
+        MethodSignature m = new MethodSignature(null,arguments);
+        if(str.charAt(0)=='p'){
+
+            m.setAccessModifier(arr[0]);
+            m.setReturnType(arr[1]);
+            m.setMethodName(arr[2]);
+
+        }
+        else{
+            m.setReturnType(arr[0]);
+            m.setMethodName(arr[1]);
+
+        }
+
+        return m;
     }
 }
